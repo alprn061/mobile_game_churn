@@ -1,10 +1,23 @@
 import numpy as np
 import pandas as pd
+import kagglehub
+import os
 
 
-def load_data(path):
-    ### Load CSV files ###
-    return pd.read_csv(path, delimiter="\t")
+def load_data(filename):
+    """
+    Downloads the dataset from Kaggle and loads it as a Pandas DataFrame.
+    :param filename: Name of the file to be loaded (e.g., 'dev.csv', 'train.csv')
+    :return: Pandas DataFrame
+    """
+    # Download the dataset from Kaggle
+    path = kagglehub.dataset_download("manchvictor/prediction-of-user-loss-in-mobile-games")
+    
+    # Construct the full file path
+    file_path = os.path.join(path, filename)
+
+    # Read the CSV file and return it as a DataFrame
+    return pd.read_csv(file_path, delimiter="\t")
 
 def total(data):
     data["total"] = data.sum(axis=1)
