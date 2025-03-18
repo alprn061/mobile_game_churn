@@ -1,39 +1,24 @@
 import streamlit as st
 import pandas as pd
+from src.st import category_select, categories, level_slct_index, level_slct, adjust_sequence
 from src.data_prep import load_data
 
-# Title
-st.title("Mobile Game Churn Analysis")
+# Load dataset
+level_seq = load_data("data/level_seq.csv")
 
-uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.write("Dataset Preview:")
-    st.dataframe(df.head())
+# Precompute level_counts
+level_counts = level_seq.groupby(["level_id", "f_success"]).size().unstack()
 
+# Streamlit UI
+st.title("Game Level Analysis Dashboard")
 
-# Load dataset from local if available
-elif "data/dev.csv":
-    df = load_data("data/dev.csv")
-    st.write("Using default dataset:")
-    st.dataframe(df.head())
+# User selects category
+category = st.selectbox("Select Category:", categories)
 
+# User selects level range
+lvl_start, lvl_end = st.slider("Select Level Range:", min_value=int(level_seq["level_id"].min()), 
+                                                  max_value=int(level_seq["level_id"].max()), 
+                                                  value=(int(level_seq["level_id"].min()), int(level_seq["level_id"].max())))
 
-
-
-# Sidebar for navigation
-st.sidebar.header("Navigation")
-page = st.sidebar.radio("Go to", ["EDA", "Model Prediction"])
-
-
-
-
-if page == "EDA":
-    st.subheader("Exploratory Data Analysis")
-    st.write("Dataset Summary:")
-    st.write(df.describe())
-
-
-elif page == "Model Prediction":
-    st.subheader("Churn Prediction Model")
-    st.write("Model will be integrated here...")
+# Call category function (Bu artık otomatik olarak `st.pyplot(fig)` içeriyor)
+category_select(category, lvl_start, lvl_end, level_counts, level_seq)
