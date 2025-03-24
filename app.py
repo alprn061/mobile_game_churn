@@ -24,7 +24,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     # Streamlit UI
-    st.title("🎮 Game Level Analysis Dashboard")
+    st.title("🎮 Game Level Analysis")
 
     # User selects category
     category = st.selectbox("Select Category:", categories)
@@ -103,6 +103,14 @@ with col2:
     st.markdown("</div>", unsafe_allow_html=True)
 
 
+# Add summary metrics to bottom-right corner
+st.markdown("---")
+st.markdown("### Game Overview Metrics")
+with st.container():
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Users", level_seq_eng["user_id"].nunique())
+    col2.metric("Average Level Duration", f"{level_seq_eng['user_avg_duration'].mean().round(2)} Seconds")
+    col3.metric("Most Played Hour", level_seq_eng.groupby("most_played_hour").size().idxmax())
 
 
 
