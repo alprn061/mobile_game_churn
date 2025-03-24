@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def train_data(data, train):
     data = data.merge(train, on = "user_id", how = "left").dropna()
     return data
