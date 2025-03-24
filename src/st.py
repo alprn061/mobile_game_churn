@@ -9,7 +9,7 @@ from src.data_prep import load_data, total_ratio
 level_seq = load_data("data/level_seq.csv")
 level_counts = level_seq.groupby(["level_id", "f_success"]).size().unstack()
 level_counts = total_ratio(level_counts)
-categories = ["Success & Fail Attempts", "Average Duration", "Average Rest Steps", "Average Duration2", "Average Rest Steps2"]
+categories = ["Success & Fail Attempts", "Average Duration", "Average Rest Steps"]
 
 def adjust_sequence(lvl_start, lvl_end):
     level_range = lvl_end - lvl_start
@@ -52,31 +52,8 @@ def category_select(category, lvl_start, lvl_end, level_counts, level_seq):
                           xaxis=dict(tickangle=-45))
                           
         st.plotly_chart(fig, use_container_width=True)
-
-    elif category == "Average Duration":
-        data = level_slct(lvl_start, lvl_end, sequence, level_seq) 
-        avg_duration = data.groupby("level_id", as_index=False)["f_duration"].mean()
-
-        fig, ax = plt.subplots(figsize=(12, 6))
-        sns.lineplot(x="level_id", y="f_duration", data=avg_duration, ax=ax)
-        ax.set_xlabel("Level")
-        ax.set_ylabel("Avg Duration")
-        ax.set_title("Average Level Duration per Level")
-        st.pyplot(fig)  
-
-    elif category == "Average Rest Steps":
-        data = level_slct(lvl_start, lvl_end, sequence, level_seq)
-        avg_rest = data.groupby("level_id", as_index=False)["f_reststep"].mean()
-
-        fig, ax = plt.subplots(figsize=(12, 6))
-        sns.lineplot(x="level_id", y="f_reststep", data=avg_rest, ax=ax)
-        ax.set_xlabel("Level")
-        ax.set_ylabel("Avg Rest Steps")
-        ax.set_title("Average Rest Steps per Level")
-        st.pyplot(fig)  
-
     
-    elif category == "Average Duration2":
+    elif category == "Average Duration":
         data = level_slct(lvl_start, lvl_end, sequence, level_seq)
         avg_duration = data.groupby("level_id", as_index=False)["f_duration"].mean()
 
@@ -87,7 +64,7 @@ def category_select(category, lvl_start, lvl_end, level_counts, level_seq):
         
         st.plotly_chart(fig, use_container_width=True)
 
-    elif category == "Average Rest Steps2":
+    elif category == "Average Rest Steps":
         data = level_slct(lvl_start, lvl_end, sequence, level_seq)
         avg_duration = data.groupby("level_id", as_index=False)["f_reststep"].mean()
 
