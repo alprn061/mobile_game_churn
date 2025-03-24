@@ -47,6 +47,8 @@ with col2:
     with  open("models/random_forest.pkl", "rb") as model_file:
         model = pickle.load(model_file)
 
+    with  open("models/random_forest_best.pkl", "rb") as model_file2:
+        best_model = pickle.load(model_file2)
 
     # take input
 
@@ -94,8 +96,8 @@ with col2:
     st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
 
     if st.button("Predict"):
-        prediction = model.predict(input_features)
-        probability = model.predict_proba(input_features)[0][1] 
+        prediction = best_model.predict(input_features)
+        probability = best_model.predict_proba(input_features)[0][1] 
 
         churn_status = "🔴 User will churn 🚨" if prediction[0] == 1 else "🟢 User will not churn ✅"
         st.subheader(f"Result: {churn_status}")
